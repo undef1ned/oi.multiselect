@@ -246,6 +246,22 @@ angular.module('oi.multiselect')
         return true;
     }
 
+    function isPart(y, x){
+        if ( x === y ) return true;
+        if ( ! ( x instanceof Object ) || ! ( y instanceof Object ) ) return false;
+
+        for ( var p in x ) {
+            if ( ! x.hasOwnProperty( p ) ) continue;
+            if ( ! y.hasOwnProperty( p ) ) return false;
+            if ( x[ p ] === y[ p ] ) continue;
+            if ( typeof( x[ p ] ) !== "object" ) return false;
+            if ( ! objectEquals( x[ p ],  y[ p ] ) ) return false;
+        }
+
+        return true;
+
+    }
+
     //lodash _.intersection + filter + callback + invert
     function intersection(xArr, yArr, callback, xFilter, yFilter, invert) {
         var i, j, n, filteredX, filteredY, out = invert ? [].concat(xArr) : [];
@@ -288,6 +304,7 @@ angular.module('oi.multiselect')
         objToArr:           objToArr,
         getValue:           getValue,
         isEqual:            isEqual,
+        isPart:             isPart,
         intersection:       intersection
     }
 }]);

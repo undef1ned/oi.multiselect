@@ -280,6 +280,22 @@ angular.module('oi.multiselect')
         return true;
     }
 
+    function isPart(y, x){
+        if ( x === y ) return true;
+        if ( ! ( x instanceof Object ) || ! ( y instanceof Object ) ) return false;
+
+        for ( var p in x ) {
+            if ( ! x.hasOwnProperty( p ) ) continue;
+            if ( ! y.hasOwnProperty( p ) ) return false;
+            if ( x[ p ] === y[ p ] ) continue;
+            if ( typeof( x[ p ] ) !== "object" ) return false;
+            if ( ! objectEquals( x[ p ],  y[ p ] ) ) return false;
+        }
+
+        return true;
+
+    }
+
     //lodash _.intersection + filter + callback + invert
     function intersection(xArr, yArr, callback, xFilter, yFilter, invert) {
         var i, j, n, filteredX, filteredY, out = invert ? [].concat(xArr) : [];
@@ -322,6 +338,7 @@ angular.module('oi.multiselect')
         objToArr:           objToArr,
         getValue:           getValue,
         isEqual:            isEqual,
+        isPart:             isPart,
         intersection:       intersection
     }
 }]);
@@ -369,6 +386,8 @@ angular.module('oi.multiselect')
                 matchesWereReset     = false,
                 optionsFn            = $parse(attrs.oiMultiselectOptions);
 
+            var modelContains = $parse(attrs.modelContains);
+
             var timeoutPromise,
                 lastQuery;
 
@@ -406,7 +425,7 @@ angular.module('oi.multiselect')
                     if (selectAsFn && value) {
                         promise = getMatches(null, value)
                             .then(function(collection) {
-                                return oiUtils.intersection(collection, output, oiUtils.isEqual, selectAs);
+                                return oiUtils.intersection(collection, output, modelContains ? oiUtils.isPart : oiUtils.isEqual, selectAs);
                             });
                         timeoutPromise = null; //`resetMatches` should not cancel the `promise`
                     }
@@ -716,7 +735,7 @@ angular.module('oi.multiselect')
                             .then(function(values) {
                                 if (!querySelectAs) {
                                     var filteredList   = $filter(options.listFilter)(oiUtils.objToArr(values), query, getLabel);
-                                    var withoutOverlap = oiUtils.intersection(filteredList, scope.output, oiUtils.isEqual, trackBy, trackBy, true);
+                                    var withoutOverlap = oiUtils.intersection(filteredList, scope.output, modelContains ? oiUtils.isPart : oiUtils.isEqual, trackBy, trackBy, true);
                                     var filteredOutput = filter(withoutOverlap);
 
                                     scope.groups = group(filteredOutput);
