@@ -255,7 +255,7 @@ angular.module('oi.multiselect')
             if ( ! y.hasOwnProperty( p ) ) return false;
             if ( x[ p ] === y[ p ] ) continue;
             if ( typeof( x[ p ] ) !== "object" ) return false;
-            if ( ! objectEquals( x[ p ],  y[ p ] ) ) return false;
+            //if ( ! objectEquals( x[ p ],  y[ p ] ) ) return false;
         }
 
         return true;

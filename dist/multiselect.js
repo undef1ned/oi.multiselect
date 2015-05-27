@@ -256,7 +256,7 @@ angular.module('oi.multiselect')
             if ( ! y.hasOwnProperty( p ) ) return false;
             if ( x[ p ] === y[ p ] ) continue;
             if ( typeof( x[ p ] ) !== "object" ) return false;
-            if ( ! objectEquals( x[ p ],  y[ p ] ) ) return false;
+            //if ( ! objectEquals( x[ p ],  y[ p ] ) ) return false;
         }
 
         return true;
@@ -354,6 +354,7 @@ angular.module('oi.multiselect')
                 optionsFn            = $parse(attrs.oiMultiselectOptions);
 
             var modelContains = $parse(attrs.modelContains);
+            var customItems =  $parse(attrs.modelContains);
 
             var timeoutPromise,
                 lastQuery;
@@ -392,7 +393,7 @@ angular.module('oi.multiselect')
                     if (selectAsFn && value) {
                         promise = getMatches(null, value)
                             .then(function(collection) {
-                                return oiUtils.intersection(collection, output, modelContains ? oiUtils.isPart : oiUtils.isEqual, selectAs);
+                                return oiUtils.intersection(customItems ? value : collection, output, modelContains ? oiUtils.isPart : oiUtils.isEqual, selectAs);
                             });
                         timeoutPromise = null; //`resetMatches` should not cancel the `promise`
                     }
