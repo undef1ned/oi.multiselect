@@ -353,8 +353,8 @@ angular.module('oi.multiselect')
                 matchesWereReset     = false,
                 optionsFn            = $parse(attrs.oiMultiselectOptions);
 
-            var modelContains = $parse(attrs.modelContains);
-            var customItems =  $parse(attrs.modelContains);
+            var modelContains = attrs.modelContains;
+            var customItems =  attrs.customItems;
 
             var timeoutPromise,
                 lastQuery;
@@ -393,6 +393,9 @@ angular.module('oi.multiselect')
                     if (selectAsFn && value) {
                         promise = getMatches(null, value)
                             .then(function(collection) {
+                                if (value && value.length && !value[value.length -1]){
+                                    value.splice(value.length -1, 1);
+                                }
                                 return oiUtils.intersection(customItems ? value : collection, output, modelContains ? oiUtils.isPart : oiUtils.isEqual, selectAs);
                             });
                         timeoutPromise = null; //`resetMatches` should not cancel the `promise`
