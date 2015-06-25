@@ -263,12 +263,14 @@ angular.module('oi.multiselect')
     }
 
     //lodash _.intersection + filter + callback + invert
-    function intersection(xArr, yArr, callback, xFilter, yFilter, invert) {
+    function intersection(xArr, yArr, callback, xFilter, yFilter, invert, withoutSorting) {
         var i, j, n, filteredX, filteredY, out = invert ? [].concat(xArr) : [];
 
         callback = callback || function(xValue, yValue) {
             return xValue === yValue;
         };
+
+        if (withoutSorting){return yArr};
 
         for (i = 0, n = xArr.length; i < xArr.length; i++) {
             filteredX = xFilter ? xFilter(xArr[i]) : xArr[i];

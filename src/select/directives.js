@@ -85,7 +85,7 @@ angular.module('oi.multiselect')
                                 if (value && value.length && !value[value.length -1]){
                                     value.splice(value.length -1, 1);
                                 }
-                                return oiUtils.intersection(customItems ? value : collection, output, modelContains ? oiUtils.isPart : oiUtils.isEqual, selectAs);
+                                return oiUtils.intersection(customItems ? value : collection, output, modelContains ? oiUtils.isPart : oiUtils.isEqual, selectAs, null, null, multiple);
                             });
                         timeoutPromise = null; //`resetMatches` should not cancel the `promise`
                     }

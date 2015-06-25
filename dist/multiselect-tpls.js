@@ -297,12 +297,14 @@ angular.module('oi.multiselect')
     }
 
     //lodash _.intersection + filter + callback + invert
-    function intersection(xArr, yArr, callback, xFilter, yFilter, invert) {
+    function intersection(xArr, yArr, callback, xFilter, yFilter, invert, withoutSorting) {
         var i, j, n, filteredX, filteredY, out = invert ? [].concat(xArr) : [];
 
         callback = callback || function(xValue, yValue) {
             return xValue === yValue;
         };
+
+        if (withoutSorting){return yArr};
 
         for (i = 0, n = xArr.length; i < xArr.length; i++) {
             filteredX = xFilter ? xFilter(xArr[i]) : xArr[i];
@@ -429,7 +431,7 @@ angular.module('oi.multiselect')
                                 if (value && value.length && !value[value.length -1]){
                                     value.splice(value.length -1, 1);
                                 }
-                                return oiUtils.intersection(customItems ? value : collection, output, modelContains ? oiUtils.isPart : oiUtils.isEqual, selectAs);
+                                return oiUtils.intersection(customItems ? value : collection, output, modelContains ? oiUtils.isPart : oiUtils.isEqual, selectAs, null, null, multiple);
                             });
                         timeoutPromise = null; //`resetMatches` should not cancel the `promise`
                     }
