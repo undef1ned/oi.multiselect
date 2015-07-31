@@ -503,6 +503,12 @@ angular.module('oi.multiselect')
                             getMatches(scope.query);
                         }
                     }
+                    if (event.type === 'click' && angular.isDefined(attrs.notempty) && scope.isOpen) {
+                        $timeout(function() {
+                            scope.isFocused = false;
+                            scope.isOpen = false;
+                        }, 10);
+                    }
                 };
 
                 scope.addItem = function addItem(option) {
